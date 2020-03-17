@@ -1,0 +1,68 @@
+https://medium.com/@dgviranmalaka/how-to-enhance-touch-pad-gestures-like-mac-in-ubuntu-18-04-laptop-f5f25d5a0b4f
+
+sudo apt install wmctrl
+sudo apt install xdotool
+sudo gem install fusuma
+
+$ cd                         # go to HOME dir
+$ cd .config                 # go to user config dir
+$ mkdir fusuma && cd fusuma/ # create and cd in to fusuma dir
+$ nano config.yml            # create config file and edit it
+
+swipe:
+  3: 
+    left: 
+      command: 'xdotool key alt+Shift+Tab'
+    right: 
+      command: 'xdotool key alt+Tab'
+    up: 
+      command: 'xdotool key super'
+    down: 
+      command: 'xdotool key super'
+  4:
+    left: 
+      command: 'xdotool key alt+Left'
+    right: 
+      command: 'xdotool key alt+Right'
+    up: 
+      command: 'xdotool key ctrl+alt+Down'
+    down: 
+      command: 'xdotool key ctrl+alt+Up'
+pinch:
+  in:
+    command: 'xdotool key ctrl+plus'
+  out:
+     command: 'xdotool key ctrl+minus'
+
+threshold:
+  swipe: 0.4
+  pinch: 0.4
+
+interval:
+  swipe: 0.8
+  pinch: 0.1
+
+
+
+08:56:44 in ~/.config/pgrimaud 
+➜ cat ~/.config/pgrimaud/desktop_switcher.sh 
+#!/usr/bin/env bash
+
+if [ $# -gt 1 ]; then
+  echo "expect 1 argument" 1>&2
+  exit 1
+fi
+
+switch_number=1
+if [ $# -eq 1 ]; then
+  switch_number=$1
+fi
+
+current_workspace=$(wmctrl -d | grep '\*' | cut -d' ' -f1)
+
+cmd="wmctrl -s"
+to=$((current_workspace + switch_number))
+if [ $to -lt 0 ]; then
+  exit 0
+fi
+
